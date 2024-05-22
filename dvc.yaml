@@ -1,0 +1,35 @@
+stages:
+  data_load:
+    cmd: python data_load.py
+    outs:
+      - datasets/csv/preprocessed/preprocessed_input.csv
+      - datasets/csv/preprocessed/preprocessed_labels.csv
+      - datasets/csv/preprocessed/preprocessed_input_test.csv
+      - datasets/csv/preprocessed/preprocessed_labels_test.csv
+  preprocess:
+    cmd: python preprocess.py
+    deps: 
+      - datasets/csv/preprocessed/preprocessed_input.csv
+      - datasets/csv/preprocessed/preprocessed_labels.csv
+      - datasets/csv/preprocessed/preprocessed_input_test.csv
+      - datasets/csv/preprocessed/preprocessed_labels_test.csv
+    outs:
+      - datasets/csv/preprocessed/preprocessed2_input.csv
+      - datasets/csv/preprocessed/preprocessed2_labels.csv
+      - datasets/csv/preprocessed/preprocessed2_input_test.csv
+      - datasets/csv/preprocessed/preprocessed2_labels_test.csv
+  train_model:
+    cmd: python train.py
+    deps:
+      - datasets/csv/preprocessed/preprocessed2_input.csv
+      - datasets/csv/preprocessed/preprocessed2_labels.csv
+    outs:
+      - models/model.pkl
+  evaluate_model:
+    cmd: python eval.py
+    deps: 
+      - datasets/csv/preprocessed/preprocessed2_input_test.csv
+      - datasets/csv/preprocessed/preprocessed2_labels_test.csv
+      - models/model.pkl
+    outs:
+      - metrics/metrics.json

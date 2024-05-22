@@ -1,0 +1,95 @@
+schema: '2.0'
+stages:
+  data_load:
+    cmd: python data_load.py
+    outs:
+    - path: datasets/csv/preprocessed/preprocessed_input.csv
+      hash: md5
+      md5: 2166be96ea8da38795d4bb7e926da39d
+      size: 333632475
+    - path: datasets/csv/preprocessed/preprocessed_input_test.csv
+      hash: md5
+      md5: ed950ecb628cd239591e4df9c5693f68
+      size: 67171806
+    - path: datasets/csv/preprocessed/preprocessed_labels.csv
+      hash: md5
+      md5: 7d9942722557bf42f0ce8716b9ef5737
+      size: 6000
+    - path: datasets/csv/preprocessed/preprocessed_labels_test.csv
+      hash: md5
+      md5: 61419742e31ec7fc95d19d8a87f48fd2
+      size: 1200
+  preprocess:
+    cmd: python preprocess.py
+    deps:
+    - path: datasets/csv/preprocessed/preprocessed_input.csv
+      hash: md5
+      md5: 2166be96ea8da38795d4bb7e926da39d
+      size: 333632475
+    - path: datasets/csv/preprocessed/preprocessed_input_test.csv
+      hash: md5
+      md5: ed950ecb628cd239591e4df9c5693f68
+      size: 67171806
+    - path: datasets/csv/preprocessed/preprocessed_labels.csv
+      hash: md5
+      md5: 7d9942722557bf42f0ce8716b9ef5737
+      size: 6000
+    - path: datasets/csv/preprocessed/preprocessed_labels_test.csv
+      hash: md5
+      md5: 61419742e31ec7fc95d19d8a87f48fd2
+      size: 1200
+    outs:
+    - path: datasets/csv/preprocessed/preprocessed2_input.csv
+      hash: md5
+      md5: 335d027191242a5db291d86189028801
+      size: 1131101208
+    - path: datasets/csv/preprocessed/preprocessed2_input_test.csv
+      hash: md5
+      md5: 0b3f740d9d2a529ff486e4894f65d5e5
+      size: 225728809
+    - path: datasets/csv/preprocessed/preprocessed2_labels.csv
+      hash: md5
+      md5: 7d9942722557bf42f0ce8716b9ef5737
+      size: 6000
+    - path: datasets/csv/preprocessed/preprocessed2_labels_test.csv
+      hash: md5
+      md5: 61419742e31ec7fc95d19d8a87f48fd2
+      size: 1200
+  train_model:
+    cmd: python train.py
+    deps:
+    - path: datasets/csv/preprocessed/preprocessed2_input.csv
+      hash: md5
+      md5: 335d027191242a5db291d86189028801
+      size: 1131101208
+    - path: datasets/csv/preprocessed/preprocessed2_labels.csv
+      hash: md5
+      md5: 7d9942722557bf42f0ce8716b9ef5737
+      size: 6000
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: e63eb6591fe4d2a92b5ba98a9efd431a.dir
+      size: 13283201
+      nfiles: 4
+  evaluate_model:
+    cmd: python eval.py
+    deps:
+    - path: datasets/csv/preprocessed/preprocessed2_input_test.csv
+      hash: md5
+      md5: 0b3f740d9d2a529ff486e4894f65d5e5
+      size: 225728809
+    - path: datasets/csv/preprocessed/preprocessed2_labels_test.csv
+      hash: md5
+      md5: 61419742e31ec7fc95d19d8a87f48fd2
+      size: 1200
+    - path: models/model.pkl
+      hash: md5
+      md5: e63eb6591fe4d2a92b5ba98a9efd431a.dir
+      size: 13283201
+      nfiles: 4
+    outs:
+    - path: metrics/metrics.json
+      hash: md5
+      md5: b42fc24d1b6e2ad9e6cabd4c8a3d4e2b
+      size: 60

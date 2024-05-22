@@ -1,0 +1,5 @@
+outs:
+- md5: ae24ec5545c8196484a1a33a65dfab10.dir
+  nfiles: 1
+  hash: md5
+  path: metric
